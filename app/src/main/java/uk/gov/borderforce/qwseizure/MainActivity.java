@@ -124,17 +124,19 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    final int NEGATIVE_ACT = 1;
+    final int SEIZED_ACT = 2;
 
     private void recordNegativeStop() {
         Intent intent = new Intent(this, NegativeStopActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, NEGATIVE_ACT);
         Log.d(TAG, "recordNegativeDone?");
         lv.refreshDrawableState();
     }
 
     private void recordSeizedGoods() {
         Intent intent = new Intent(this, SeizedGoodsActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, SEIZED_ACT);
         lv.refreshDrawableState();
     }
 

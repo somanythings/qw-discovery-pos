@@ -24,6 +24,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Calendar;
 
@@ -33,7 +35,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     final static String TAG = "SeizedGoodsActivity";
     final static Person NullPerson = new Person("", "", "", "");
     final static SeizedGoods NullSeizedGoods = new SeizedGoods("", "");
-    final static SeizureState NullState = new SeizureState(Calendar.getInstance(), "", NullPerson, NullSeizedGoods);
+    final static SeizureState NullState = new SeizureState(Calendar.getInstance(), "", NullPerson, NullSeizedGoods, "");
     SeizureState state = null;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -58,6 +60,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         wireCancelButton(this);
         wireSaveButton(this);
         wirePersonScanButton(this);
+        wireBarcodeScanButton(this);
         updateState(state);
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -73,11 +76,32 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     }
 
     private void wirePersonScanButton(final Activity activity) {
-        Button scan = (Button) findViewById(R.id.scan_person_id);
+        ImageButton scan = (ImageButton) findViewById(R.id.scan_person_id);
+        final Activity outer = this;
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "should open scan");
+                new IntentIntegrator(outer).initiateScan(); // `this` is the current Activity
+
+//                IntentIntegrator scanIntegrator = new IntentIntegrator(outer);
+//                scanIntegrator.initiateScan();
+            }
+        });
+    }
+
+    private void wireBarcodeScanButton(final Activity activity) {
+        ImageButton scan = (ImageButton) findViewById(R.id.scan_seal_id);
+        final Activity outer = this;
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "should open scan");
+                IntentIntegrator bla = new IntentIntegrator(outer);
+                bla.initiateScan(); // `this` is the current Activity
+
+//                IntentIntegrator scanIntegrator = new IntentIntegrator(outer);
+//                scanIntegrator.initiateScan();
             }
         });
     }
@@ -99,7 +123,6 @@ public class SeizedGoodsActivity extends AppCompatActivity {
                 MainActivity.addSeizure(state);
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("seized", state.summaryText());
-
                 activity.setResult(RESULT_OK, returnIntent);
                 activity.finish();
             }
@@ -138,6 +161,9 @@ public class SeizedGoodsActivity extends AppCompatActivity {
 
         EditText tm = (EditText) (findViewById(R.id.timePicker));
         tm.setText(shortTime.format(this.state.cal.getTime()));
+
+        EditText seal = (EditText) (findViewById(R.id.seal_id));
+        seal.setText(state.sealId);
     }
 
 
@@ -207,6 +233,27 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         });
     }
 
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Log.d(TAG, "result " + requestCode + " " + resultCode);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
+//        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra("SCAN_RESULT");
+                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                Log.d(TAG, "con" + contents);
+                Log.d(TAG, "form" + format);
+
+                Log.d(TAG, "contents" + result.getContents());
+                updateState(state.copyOnSealChange(result.getContents()));
+                // Handle successful scan
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+            }
+//        }
+    }
 
     protected void onRadioButtonClicked(View v) {
         Log.d(TAG, "radioButtonClicked " + v.getId());

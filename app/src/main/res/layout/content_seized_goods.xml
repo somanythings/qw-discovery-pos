@@ -4,111 +4,144 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    app:layout_scrollFlags="scroll|enterAlways|snap">
 
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay">
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:text="Summary" />
+            android:orientation="vertical" >
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/seizure_type" >
-            <RadioButton android:id="@+id/radio_tobacco"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tobacco"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_cigarettes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cigarettes"
-                android:onClick="onRadioButtonClicked"/> <RadioButton android:id="@+id/radio_cigars"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cigars"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_class_a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/class_a"
-            android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_weapon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/weapons"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_poao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/poao"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_misc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/misc"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_alcohol"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/alcohol"
-                android:onClick="onRadioButtonClicked"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            </RadioGroup>
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="Summary" />
 
-        <include layout="@layout/datetimelayout" />
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seizure_type" >
+                    <RadioButton android:id="@+id/radio_tobacco"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tobacco"
+                        android:onClick="onRadioButtonClicked"/>
+                    <RadioButton android:id="@+id/radio_cigarettes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cigarettes"
+                        android:onClick="onRadioButtonClicked"/> <RadioButton android:id="@+id/radio_cigars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cigars"
+                        android:onClick="onRadioButtonClicked"/>
+                    <RadioButton android:id="@+id/radio_class_a"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_a"
+                    android:onClick="onRadioButtonClicked"/>
+                    <RadioButton android:id="@+id/radio_weapon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/weapons"
+                        android:onClick="onRadioButtonClicked"/>
+                    <RadioButton android:id="@+id/radio_poao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/poao"
+                        android:onClick="onRadioButtonClicked"/>
+                    <RadioButton android:id="@+id/radio_misc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/misc"
+                        android:onClick="onRadioButtonClicked"/>
+                    <RadioButton android:id="@+id/radio_alcohol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/alcohol"
+                        android:onClick="onRadioButtonClicked"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <EditText
-                android:id="@+id/who"
-                android:layout_width="280dp"
-                android:inputType="textPersonName"
-                android:layout_height="wrap_content"
-                android:hint="Person Id" />
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/who"
-                android:layout_alignBottom="@id/who"
-                android:id="@+id/scan_person_id"
-                app:srcCompat="@android:drawable/ic_menu_camera" />
-        </RelativeLayout>
+                    </RadioGroup>
 
-        <EditText
-            android:id="@+id/optText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.10"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="Optional"
-            />
+                <include layout="@layout/datetimelayout" />
 
-        <include layout="@layout/cancel_save" />
-        <!--<Button-->
-            <!--android:id="@+id/cancel"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Cancel" />-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/who"
+                        android:layout_width="280dp"
+                        android:inputType="textPersonName"
+                        android:layout_height="wrap_content"
+                        android:hint="Person Id" />
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/who"
+                        android:layout_alignBottom="@id/who"
+                        android:id="@+id/scan_person_id"
+                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                </RelativeLayout>
 
-        <!--<Button-->
-            <!--android:id="@+id/save"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="Save" />-->
-    </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/seal_id"
+                        android:layout_width="280dp"
+                        android:inputType="textCapCharacters"
+                        android:layout_height="wrap_content"
+                        android:hint="Seal Barcode" />
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/seal_id"
+                        android:layout_alignBottom="@id/seal_id"
+                        android:id="@+id/scan_seal_id"
+                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                </RelativeLayout>
+
+
+                <EditText
+                    android:id="@+id/optText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.10"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:hint="Optional"
+                    android:singleLine="false"
+                    android:selectAllOnFocus="true" />
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel" />
+
+                <Button
+                    android:id="@+id/save"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Save" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

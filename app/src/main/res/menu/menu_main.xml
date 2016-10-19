@@ -8,7 +8,7 @@
         android:showAsAction="ifRoom" />
     <item android:title="Seized Goods"
         android:icon="@android:drawable/ic_input_add"
-        android:showAsAction="ifRoom"
+        android:showAsAction="ifRoom|always"
         android:id="@+id/seized_goods" />
     <item
         android:id="@+id/action_settings"

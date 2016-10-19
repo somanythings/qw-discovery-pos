@@ -11,6 +11,9 @@
     <string name="poao">POAnimalOrigin</string>
     <string name="misc">Misc</string>
 
+    <string name="anyline_license_key" translatable="false">
+        eyJzY29wZSI6WyJBTEwiXSwicGxhdGZvcm0iOlsiaU9TIiwiQW5kcm9pZCIsIldpbmRvd3MiXSwidmFsaWQiOiIyMDE3LTEwLTE5IiwibWFqb3JWZXJzaW9uIjoiMyIsImlzQ29tbWVyY2lhbCI6ZmFsc2UsInRvbGVyYW5jZURheXMiOjYwLCJpb3NJZGVudGlmaWVyIjpbImNvbS5hbmRyb2lkLmFwcGxpY2F0aW9uIl0sImFuZHJvaWRJZGVudGlmaWVyIjpbImNvbS5hbmRyb2lkLmFwcGxpY2F0aW9uIl0sIndpbmRvd3NJZGVudGlmaWVyIjpbImNvbS5hbmRyb2lkLmFwcGxpY2F0aW9uIl19CnhUNm5iVkVkZERoOGJNKzdmSHRTbERZRSsvcWVLekRLdnFyZU05aGhlZnNGWUlXZXRTN0hxVis5SXdPQjI0S2VSMkYyT2xyYjkyYkRPZ2JScHFqQU5FNUJlQ280RTh3eWp4VHRKNFFqQ09Ib296aEhhcUd3VmQ3dFRTUW03djRLUEZGdjMzWXBoUVYwZDhzNnQyK1lYNVk5bm9QdEZGYXFobktLWW1jSE5Jb1dTUUk4TnRSSzVDcEMrdTl3MVBVV1l5SXhHejFDUE5DckRPWENVMWp2Nkt4aUsycm54N0x4RkRtaWF2NUJiV1FldytCQ0YzV251VnVlT2c5cjFNdTJLb3cva2FQdTRDTEdzL2ZzSVhodWtHcWJZaktvZmg1My9lRXlpOUVNT1lwNTZqeGwzRlJOV1VzdHhUL2RCVGdJYlFEcXJZcDVYcGFhOXptQUFieGtwUT09
+    </string>
     <string-array name="goods_type">
         <item>cigarettes</item>
         <item>tobacco</item>
