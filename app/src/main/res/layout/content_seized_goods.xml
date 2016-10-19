@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_seized_goods"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="uk.gov.borderforce.qwseizure.SeizedGoodsActivity"
+    tools:showIn="@layout/activity_seized_goods">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="Summary" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seizure_type" >
+            <RadioButton android:id="@+id/radio_tobacco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tobacco"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_cigarettes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cigarettes"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_class_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/class_a"
+            android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_weapon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weapons"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_poao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/poao"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_misc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/misc"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_alcohol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alcohol"
+                android:onClick="onRadioButtonClicked"/>
+
+            </RadioGroup>
+
+        <include layout="@layout/datetimelayout"
+            android:layout_width="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/who"
+                android:layout_width="280dp"
+                android:inputType="textPersonName"
+                android:layout_height="wrap_content"
+                android:hint="Person Id" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/who"
+                android:id="@+id/scan_person_id"
+                app:srcCompat="@android:drawable/ic_menu_camera" />
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/optText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.10"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="Optional"
+            />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save" />
+    </LinearLayout>
+
+</RelativeLayout>

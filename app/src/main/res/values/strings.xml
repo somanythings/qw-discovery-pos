@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">QWSeizure</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="tobacco">Tobacco</string>
+    <string name="Cigars">Cigars</string>
+    <string name="cigarettes">Cigarettes</string>
+    <string name="class_a">Drugs</string>
+    <string name="weapons">Weapons</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="poao">POAnimalOrigin</string>
+    <string name="misc">Misc</string>
+
+    <string-array name="goods_type">
+        <item>cigarettes</item>
+        <item>tobacco</item>
+        <item>class-A</item>
+        <item>weapon</item>
+    </string-array>
+
+    <string name="title_activity_seized_goods">SeizedGoodsActivity</string>
+</resources>
