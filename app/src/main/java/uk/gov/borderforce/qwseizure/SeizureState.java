@@ -31,7 +31,7 @@ public class SeizureState extends Seizure {
 
     public SeizureState copyOnTimeChange(int hourOfDay, int minute) {
         Calendar newCalendar = (Calendar) this.cal.clone();
-        newCalendar.set(Calendar.HOUR, hourOfDay);
+        newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         newCalendar.set(Calendar.MINUTE, minute);
         return new SeizureState(newCalendar, this.freeText, this.seizedFrom, seizedGoods);
     }

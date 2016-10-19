@@ -41,7 +41,7 @@ public class NegativeStopActivity extends AppCompatActivity {
 
         public NegativeStopState copyOnTimeChange(int hourOfDay, int minute) {
             Calendar newCalendar = (Calendar) stopState.cal.clone();
-            newCalendar.set(Calendar.HOUR, hourOfDay);
+            newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             newCalendar.set(Calendar.MINUTE, minute);
             return new NegativeStopState(newCalendar, stopState.freeText);
         }

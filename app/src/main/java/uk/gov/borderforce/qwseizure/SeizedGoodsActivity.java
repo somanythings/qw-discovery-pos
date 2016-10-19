@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.Calendar;
 
 import static uk.gov.borderforce.qwseizure.NegativeStopActivity.shortTime;
@@ -29,6 +35,11 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     final static SeizedGoods NullSeizedGoods = new SeizedGoods("", "");
     final static SeizureState NullState = new SeizureState(Calendar.getInstance(), "", NullPerson, NullSeizedGoods);
     SeizureState state = null;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         wireTimeButton(this, findViewById(R.id.timePickerButton));
         wireCancelButton(this);
         wireSaveButton(this);
+        wirePersonScanButton(this);
         updateState(state);
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +67,19 @@ public class SeizedGoodsActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private void wirePersonScanButton(final Activity activity) {
+        Button scan = (Button) findViewById(R.id.scan_person_id);
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "should open scan");
+            }
+        });
     }
 
     private void wireSaveButton(final Activity activity) {
@@ -71,9 +96,9 @@ public class SeizedGoodsActivity extends AppCompatActivity {
                         }).show();
 
                 //todo find out how to return state to parent activity, rather than this public static call
-                MainActivity.addSeizure(SFactory.S("Lance Paine", Calendar.getInstance(), state.freeText));
+                MainActivity.addSeizure(state);
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("-veresult", state.summaryText());
+                returnIntent.putExtra("seized", state.summaryText());
 
                 activity.setResult(RESULT_OK, returnIntent);
                 activity.finish();
@@ -114,7 +139,6 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         EditText tm = (EditText) (findViewById(R.id.timePicker));
         tm.setText(shortTime.format(this.state.cal.getTime()));
     }
-
 
 
     private void wireTimeText() {
@@ -174,6 +198,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
                 TimePickerDialog dpd = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Log.d(TAG, "onTimeSet " + hourOfDay + ":" + minute);
                         updateState(state.copyOnTimeChange(hourOfDay, minute));
                     }
                 }, state.cal.get(Calendar.HOUR_OF_DAY), state.cal.get(Calendar.MINUTE), true);
@@ -192,23 +217,59 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     private String getCurrentGoodType(View v) {
         switch (v.getId()) {
             case R.id.radio_tobacco:
-                Log.d(TAG, "tobacco");
                 return "tobacco";
             case R.id.radio_weapon:
-                Log.d(TAG, "weapon");
                 return "weapon";
             case R.id.radio_cigarettes:
-                Log.d(TAG, "cigarettes");
                 return "cigarettes";
+            case R.id.radio_cigars:
+                return "cigars";
             case R.id.radio_class_a:
-                Log.d(TAG, "drugs");
                 return "drugs";
+            case R.id.radio_misc:
+                return "misc";
+            case R.id.radio_poao:
+                return "poao";
             case R.id.radio_alcohol:
-                Log.d(TAG, "alcohol");
                 return "alcohol";
             default:
                 return "";
         }
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("SeizedGoods Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 }
