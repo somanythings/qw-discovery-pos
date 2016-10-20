@@ -39,4 +39,5 @@ eyJzY29wZSI6WyJBTEwiXSwicGxhdGZvcm0iOlsiaU9TIiwiQW5kcm9pZCIsIldpbmRvd3MiXSwidmFs
     <string name="title_activity_scan_travel_document">ScanTravelDocumentActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_pickup_for_lockup">PickupForLockup</string>
 </resources>

@@ -10,18 +10,19 @@ import static uk.gov.borderforce.qwseizure.SFactory.isoFormat;
 import static uk.gov.borderforce.qwseizure.SeizedGoodsActivity.NullSeizedGoods;
 
 public class SeizureState extends Seizure {
-    public static final SeizedGoods NO_DETAILS = NullSeizedGoods;
 
-    final public Calendar cal;
-    final public CharSequence freeText;
-    final public Person seizedFrom;
-    final public SeizedGoods seizedGoods;
-    final public String sealId;
+     public Calendar cal;
+    public String freeText;
+    public Person seizedFrom;
+    public SeizedGoods seizedGoods;
+    public String sealId;
 
-    public SeizureState(Calendar cal, CharSequence freeText, Person seizedFrom, SeizedGoods seizedGoods, String sealId) {
+    public SeizureState() {}
+
+    public SeizureState(Calendar cal, String freeText, Person seizedFrom, SeizedGoods seizedGoods, String sealId) {
         super("Lance Paine", cal, freeText); //todo probably don't want to have this dependency on seizure here, this is just for expediency right now.
         this.cal = cal;
-        this.freeText = freeText;
+        this.freeText = freeText.toString();
         this.seizedFrom = seizedFrom;
         this.seizedGoods = seizedGoods;
         this.sealId = sealId;
@@ -48,7 +49,7 @@ public class SeizureState extends Seizure {
         return new SeizureState(newCalendar, this.freeText, this.seizedFrom, seizedGoods, sealId);
     }
 
-    public SeizureState copyOnTextChange(CharSequence newString) {
+    public SeizureState copyOnTextChange(String newString) {
         return new SeizureState(this.cal, newString, this.seizedFrom, seizedGoods, sealId);
     }
 
@@ -79,7 +80,7 @@ public class SeizureState extends Seizure {
                 ", seizedFrom=" + seizedFrom +
                 ", seizedGoods=" + seizedGoods +
                 ", sealId='" + sealId + '\'' +
-                '}';
+                "} " + super.toString();
     }
 
     public SeizureState copyOnPersonChange(String mrtz) {

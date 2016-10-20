@@ -1,43 +1,30 @@
 package uk.gov.borderforce.qwseizure;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextClock;
-import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -45,11 +32,61 @@ public class MainActivity extends AppCompatActivity {
     final static List<Seizure> seizures = new ArrayList<Seizure>();
     ListView lv;
 
+    public static final String SEIZURES_STORE = "SEIZURES_STORE";
+    public static final String NEGATIVE_STORE = "NEGATIVE_STORE";
+
+
     public static void addSeizure(Seizure s) {
         Log.d(TAG, "addSeizure " + s);
         seizures.add(s);
     }
 
+    private void saveNegativeSeizure(String extra) {
+        Gson gson = new Gson();
+        NegativeStop seizure = gson.fromJson(extra, NegativeStop.class);
+        saveNegativeStop(seizure, extra);
+    }
+
+    private void saveNegativeStop(NegativeStop s, String json) {
+        SharedPreferences.Editor editor = getSharedPreferences(NEGATIVE_STORE, 0).edit();
+        editor.putString("" + s.when.getTimeInMillis(), json);
+        editor.commit();
+    }
+
+    private void saveSeizureStateFromJson(String extra) {
+        Gson gson = new Gson();
+        SeizureState seizure = gson.fromJson(extra, SeizureState.class);
+        saveSeizure(seizure, extra);
+    }
+
+
+    public void saveSeizure(SeizureState s, String json) {
+        SharedPreferences.Editor editor = getSharedPreferences(SEIZURES_STORE, 0).edit();
+        editor.putString(s.sealId, json);
+        editor.commit();
+    }
+
+    public void loadSeizures() {
+        SharedPreferences editor = getSharedPreferences(SEIZURES_STORE, 0);
+        Gson gson = new Gson();
+
+        for (Map.Entry<String, ?> entry : editor.getAll().entrySet()) {
+            SeizureState ss = gson.fromJson(entry.getValue().toString(), SeizureState.class);
+            Log.d(TAG, "loaded " + ss.sealId + " -> " + ss.summaryText());
+            addSeizure(ss);
+        }
+    }
+
+    public void loadNegativeStops() {
+        SharedPreferences editor = getSharedPreferences(NEGATIVE_STORE, 0);
+        Gson gson = new Gson();
+
+        for (Map.Entry<String, ?> entry : editor.getAll().entrySet()) {
+            NegativeStop ss = gson.fromJson(entry.getValue().toString(), NegativeStop.class);
+            Log.d(TAG, "loaded " + entry.getKey() + " -> " + ss.toString());
+            addSeizure(ss);
+        }
+    }
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -63,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        loadSeizures();
+        loadNegativeStops();
         refreshSeizureListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -124,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     final int NEGATIVE_ACT = 1;
     final int SEIZED_ACT = 2;
 
@@ -143,13 +182,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult " + requestCode + " " + resultCode);
-        switch (resultCode) {
-            case RESULT_OK:
-                lv.refreshDrawableState();
-                refreshSeizureListView();
+        switch (requestCode) {
+            case NEGATIVE_ACT:
+                if (resultCode == RESULT_OK) {
+                    String extra = data.getStringExtra("NEGATIVE");
+                    saveNegativeSeizure(extra);
+                }
+                break;
+            case SEIZED_ACT:
+                switch (resultCode) {
+                    case RESULT_OK:
+                        lv.refreshDrawableState();
+                        String extra = data.getStringExtra("SEIZURE");
+                        Log.d(TAG, "Seizure result: " + extra);
+                        saveSeizureStateFromJson(extra);
+
+                        refreshSeizureListView();
+                        return;
+                }
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.

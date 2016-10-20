@@ -13,7 +13,7 @@ public class NegativeStop extends Seizure {
 
     @Override
     public String toString() {
-        return "-ve" + isoFormat.format(when.getTime()) + " from: " + who + " " + summary.substring(0, Math.min(40, summary.length()));
+        return "-ve" + isoFormat.format(when.getTime()) + " from: " + seizedBy + " " + summary.substring(0, Math.min(40, summary.length()));
     }
 
 

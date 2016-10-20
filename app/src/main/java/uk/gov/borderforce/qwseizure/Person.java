@@ -20,8 +20,6 @@ public class Person {
     final public String sex;
     final public String mrtzJson;
 
-
-
     public Person(String name, String givenNames, String surNames, String documentNumber, String nationality, String dob, String sex, String mrtz) {
         this.name = name;
         this.givenNames = givenNames;

@@ -103,25 +103,7 @@
                     app:srcCompat="@android:drawable/ic_menu_camera" />
             </RelativeLayout>
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/seal_id"
-                    android:layout_width="280dp"
-                    android:inputType="textCapCharacters"
-                    android:layout_height="wrap_content"
-                    android:hint="Seal Barcode" />
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/seal_id"
-                    android:layout_alignBottom="@id/seal_id"
-                    android:id="@+id/scan_seal_id"
-                    app:srcCompat="@android:drawable/ic_menu_camera" />
-            </RelativeLayout>
-
+            <include layout="@layout/scan_seal_barcode" />
 
             <EditText
                 android:id="@+id/optText"

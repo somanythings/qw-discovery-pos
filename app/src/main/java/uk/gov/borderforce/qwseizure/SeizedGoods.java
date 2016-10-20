@@ -4,10 +4,10 @@ package uk.gov.borderforce.qwseizure;
  * Created by lancep on 19/10/2016.
  */
 public class SeizedGoods {
-    public final String what;
-    public final int quantity;
-    public final String units;
-
+    public  String what;
+    public int quantity;
+    public String units;
+    public SeizedGoods(){};
     public SeizedGoods(String what, int quantity, String units) {
         this.what = what;
         this.quantity = quantity;

@@ -17,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.gson.Gson;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -24,53 +26,6 @@ public class NegativeStopActivity extends AppCompatActivity {
     final static SimpleDateFormat longDateTimeFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' HH:mm");
     final static SimpleDateFormat shortTime = new SimpleDateFormat("HH:mm");
     final static String TAG = "NegativeStopActivity";
-
-    class NegativeStopState {
-        final public Calendar cal;
-        final public CharSequence freeText;
-
-        public NegativeStopState(Calendar cal, CharSequence freeText) {
-            this.cal = cal;
-            this.freeText = freeText;
-        }
-
-        public String summaryText() {
-            String calform = longDateTimeFormat.format(cal.getTime());
-            return "-ve stop @ " + calform + " " + freeText;
-        }
-
-        public NegativeStopState copyOnTimeChange(int hourOfDay, int minute) {
-            Calendar newCalendar = (Calendar) stopState.cal.clone();
-            newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            newCalendar.set(Calendar.MINUTE, minute);
-            return new NegativeStopState(newCalendar, stopState.freeText);
-        }
-
-        public NegativeStopState copyOnDateChange(int day, int month, int year) {
-            Calendar newCalendar = (Calendar) stopState.cal.clone();
-            newCalendar.set(Calendar.DAY_OF_MONTH, day);
-            newCalendar.set(Calendar.MONTH, month);
-            newCalendar.set(Calendar.YEAR, year);
-            return new NegativeStopState(newCalendar, stopState.freeText);
-        }
-
-        public NegativeStopState copyOnTextChange(CharSequence newString) {
-            return new NegativeStopState(this.cal, newString);
-        }
-
-        public int year() {
-            return cal.get(Calendar.YEAR);
-        }
-
-        public int month() {
-            return cal.get(Calendar.MONTH);
-        }
-
-
-        public int dayOfMonth() {
-            return cal.get(Calendar.DAY_OF_MONTH);
-        }
-    }
 
 
     NegativeStopState stopState = null;
@@ -101,10 +56,15 @@ public class NegativeStopActivity extends AppCompatActivity {
                             }
                         }).show();
 
-                MainActivity.addSeizure(SFactory.Negative("Lance Paine", Calendar.getInstance(), stopState.freeText));
+                Seizure negative = SFactory.Negative("Lance Paine", Calendar.getInstance(), stopState.freeText);
+//                MainActivity.addSeizure(negative);
+
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("-veresult", stopState.summaryText());
 
+                Gson gson = new Gson();
+                String stopStateAsJson = gson.toJson(negative);
+                returnIntent.putExtra("NEGATIVE", stopStateAsJson);
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }
