@@ -5,18 +5,29 @@ package uk.gov.borderforce.qwseizure;
  */
 public class SeizedGoods {
     public final String what;
-    public final String quantity;
+    public final int quantity;
+    public final String units;
 
-    public SeizedGoods(String what, String quantity) {
+    public SeizedGoods(String what, int quantity, String units) {
         this.what = what;
         this.quantity = quantity;
+        this.units = units;
     }
 
     @Override
     public String toString() {
         return "SeizedGoods{" +
                 "what='" + what + '\'' +
-                ", quantity='" + quantity + '\'' +
+                ", quantity=" + quantity +
+                ", units='" + units + '\'' +
                 '}';
+    }
+
+    public SeizedGoods copyOnQuantity(int newVal) {
+        return new SeizedGoods(this.what, newVal, this.units);
+    }
+
+    public SeizedGoods copyOnUnits(String units) {
+        return new SeizedGoods(this.what, this.quantity, units);
     }
 }

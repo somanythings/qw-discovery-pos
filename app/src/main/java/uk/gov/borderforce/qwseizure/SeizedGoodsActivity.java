@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -27,14 +30,21 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
+import at.nineyards.anyline.modules.AnylineBaseModuleView;
+import at.nineyards.anyline.modules.mrz.MrzScanView;
+
 import static uk.gov.borderforce.qwseizure.NegativeStopActivity.shortTime;
+import static uk.gov.borderforce.qwseizure.Person.NullPerson;
 
 public class SeizedGoodsActivity extends AppCompatActivity {
+    final static int SCAN_TRAVEL_DOCUMENT = 3;
     final static String TAG = "SeizedGoodsActivity";
-    final static Person NullPerson = new Person("", "", "", "");
-    final static SeizedGoods NullSeizedGoods = new SeizedGoods("", "");
+    final static SeizedGoods NullSeizedGoods = new SeizedGoods("", 0, "");
     final static SeizureState NullState = new SeizureState(Calendar.getInstance(), "", NullPerson, NullSeizedGoods, "");
     SeizureState state = null;
     /**
@@ -42,6 +52,8 @@ public class SeizedGoodsActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private MrzScanView mrzResultView;
+    private AnylineBaseModuleView mrzScanView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         state = NullState;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seized_goods);
+        setTitle("Seized Goods");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -82,7 +95,9 @@ public class SeizedGoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "should open scan");
-                new IntentIntegrator(outer).initiateScan(); // `this` is the current Activity
+                Intent intent = new Intent(outer, ScanTravelDocumentActivity.class);
+                startActivityForResult(intent, SCAN_TRAVEL_DOCUMENT);
+
 
 //                IntentIntegrator scanIntegrator = new IntentIntegrator(outer);
 //                scanIntegrator.initiateScan();
@@ -153,8 +168,12 @@ public class SeizedGoodsActivity extends AppCompatActivity {
 
     private void updateState(SeizureState state) {
         this.state = state;
+        setTitle("Seized Goods - " + state.seizedGoods.what);
+        Log.d(TAG, "Summary should be: " + this.state.summaryText());
+
         TextView tv = (TextView) (findViewById(R.id.textView));
         tv.setText(this.state.summaryText());
+
         EditText dp = (EditText) (findViewById(R.id.datePicker));
         dp.setText(this.state.cal.get(Calendar.DAY_OF_MONTH) + "/" + this.state.cal.get(Calendar.MONTH)
                 + "/" + this.state.cal.get(Calendar.YEAR));
@@ -164,6 +183,9 @@ public class SeizedGoodsActivity extends AppCompatActivity {
 
         EditText seal = (EditText) (findViewById(R.id.seal_id));
         seal.setText(state.sealId);
+
+        EditText person = (EditText) (findViewById(R.id.seized_from_text));
+        person.setText(state.seizedFrom.toString());
     }
 
 
@@ -234,12 +256,14 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     }
 
 
-
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Log.d(TAG, "result " + requestCode + " " + resultCode);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
 //        if (requestCode == 0) {
+        if (requestCode == SCAN_TRAVEL_DOCUMENT) {
+            onMrtzScanResult(intent);
+        } else {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
@@ -253,12 +277,54 @@ public class SeizedGoodsActivity extends AppCompatActivity {
                 // Handle cancel
             }
 //        }
+        }
+    }
+
+    ///D/SeizedGoodsActivity: MRTZ scan {"documentType":"P","documentNumber":"LH829577","surNames":"PAINE","givenNames":"LANCE BARRY","countryCode":"NZL","issuingCountryCode":"NZL","nationalityCountryCode":"NZL","dayOfBirth":"800110","expirationDate":"191009","sex":"M","personalNumber":"","personalNumber2":"","checkDigitNumber":"2","checkDigitPersonalNumber":"0","checkDigitDayOfBirth":"6","checkDigitExpirationDate":"4","checkDigitFinal":"0","allCheckDigitsValid":true}
+    private void onMrtzScanResult(Intent intent) {
+        String mrtzJson = intent.getStringExtra("MRTZ");
+        Log.d(TAG, "MRTZ scan " + mrtzJson);
+
+        updateState(state.copyOnPersonChange(mrtzJson));
     }
 
     protected void onRadioButtonClicked(View v) {
         Log.d(TAG, "radioButtonClicked " + v.getId());
         String currentType = getCurrentGoodType(v);
-        updateState(state.copyOnGoodsChange(currentType));
+        setGoodsQuantityView(currentType);
+        updateState(state.copyOnGoodsTypeChange(currentType));
+    }
+
+    private void setGoodsQuantityView(String currentType) {
+        LinearLayout quantityLayout = clearQuantityLayout();
+        int id = R.layout.cigarettes_quantity;
+        View child = getLayoutInflater().inflate(id, null);
+        NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
+            @Override
+            public String format(int value) {
+                int temp = value * 5;
+                return "" + temp;
+            }
+        };
+        NumberPicker np = (NumberPicker) child.findViewById(R.id.quantityPicker);
+        np.setMinValue(0);
+        np.setFormatter(formatter);
+        np.setMaxValue(Integer.MAX_VALUE);
+        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                updateState(state.copyOnGoodsQuantityChange(newVal));
+            }
+        });
+
+        quantityLayout.addView(child);
+    }
+
+    @NonNull
+    private LinearLayout clearQuantityLayout() {
+        LinearLayout quantityLayout = (LinearLayout) findViewById(R.id.seized_quantity_layout);
+        quantityLayout.removeAllViewsInLayout();
+        return quantityLayout;
     }
 
     private String getCurrentGoodType(View v) {

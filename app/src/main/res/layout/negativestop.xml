@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="Summary" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".MainActivity">
+
+        <EditText
+            android:id="@+id/datePicker"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:layout_alignParentTop="true" />
+
+        <ImageButton
+            android:id="@+id/datePickerButton"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/datePicker"
+            android:layout_toRightOf="@+id/datePicker"
+            android:cropToPadding="true"
+            app:srcCompat="@android:drawable/ic_menu_my_calendar"
+            android:layout_width="wrap_content" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/timePicker"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:inputType="time" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/timePicker"
+            app:srcCompat="@android:drawable/ic_menu_recent_history"
+            android:id="@+id/timePickerButton"
+            android:layout_weight="0.27" />
+    </RelativeLayout>
+
+    <!--<TimePicker-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:inputType="datetime"-->
+    <!--android:ems="10"-->
+    <!--android:id="@+id/timePicker" />-->
+
+    <EditText
+        android:id="@+id/optText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.10"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Optional"
+         />
+
+    <include layout="@layout/cancel_save" />
+
+</LinearLayout>

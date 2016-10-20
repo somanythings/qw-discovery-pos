@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
-            android:id="@+id/who"
+            android:id="@+id/seized_from_text"
             android:layout_width="280dp"
             android:inputType="textPersonName"
             android:layout_height="wrap_content" />
         <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/who"
+        android:layout_toRightOf="@+id/seized_from_text"
         />
     </RelativeLayout>
 

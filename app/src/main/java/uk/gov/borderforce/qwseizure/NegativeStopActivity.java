@@ -77,7 +77,7 @@ public class NegativeStopActivity extends AppCompatActivity {
 
     public void recordNegativeStop() {
         java.util.Calendar cal = Calendar.getInstance();
-        setContentView(R.layout.negativestop);
+//        setContentView(R.layout.negativestop);
         updateNegativeStopState(new NegativeStopState(cal, ""));
         wireTimeText();
         wireDateText(findViewById(R.id.datePicker));
@@ -215,7 +215,7 @@ public class NegativeStopActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_negative_stop);
+        setContentView(R.layout.negativestop);
         setTitle("Negative Stop");
         recordNegativeStop();
     }

@@ -7,9 +7,10 @@ import java.util.Calendar;
 
 import static uk.gov.borderforce.qwseizure.NegativeStopActivity.longDateTimeFormat;
 import static uk.gov.borderforce.qwseizure.SFactory.isoFormat;
+import static uk.gov.borderforce.qwseizure.SeizedGoodsActivity.NullSeizedGoods;
 
 public class SeizureState extends Seizure {
-    public static final SeizedGoods NO_DETAILS = new SeizedGoods("", "");
+    public static final SeizedGoods NO_DETAILS = NullSeizedGoods;
 
     final public Calendar cal;
     final public CharSequence freeText;
@@ -65,9 +66,6 @@ public class SeizureState extends Seizure {
         return cal.get(Calendar.DAY_OF_MONTH);
     }
 
-    public SeizureState copyOnGoodsChange(String currentType) {
-        return new SeizureState(this.cal, this.freeText, this.seizedFrom, new SeizedGoods(currentType, ""), sealId);
-    }
 
     public SeizureState copyOnSealChange(String sealId) {
         return new SeizureState(this.cal, this.freeText, this.seizedFrom, this.seizedGoods, sealId);
@@ -83,4 +81,17 @@ public class SeizureState extends Seizure {
                 ", sealId='" + sealId + '\'' +
                 '}';
     }
+
+    public SeizureState copyOnPersonChange(String mrtz) {
+    return new SeizureState(this.cal, this.freeText, Person.fromMrtzJson(mrtz), this.seizedGoods, sealId);
+    }
+
+    public SeizureState copyOnGoodsQuantityChange(int newVal) {
+        return new SeizureState(this.cal, this.freeText, this.seizedFrom, this.seizedGoods.copyOnQuantity(newVal), sealId);
+    }
+
+    public SeizureState copyOnGoodsTypeChange(String currentType) {
+        return new SeizureState(this.cal, this.freeText, this.seizedFrom, new SeizedGoods(currentType, this.seizedGoods.quantity, ""), sealId);
+    }
+
 }
