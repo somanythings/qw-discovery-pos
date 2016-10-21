@@ -158,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
                 recordSeizedGoods();
                 lv.refreshDrawableState();
                 return true;
+            case R.id.lockup_operator:
+                lockupOperatorMode();
+
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -165,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     final int NEGATIVE_ACT = 1;
     final int SEIZED_ACT = 2;
+    final int LOCKUP_ACT = 3;
 
     private void recordNegativeStop() {
         Intent intent = new Intent(this, NegativeStopActivity.class);
@@ -177,6 +182,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SeizedGoodsActivity.class);
         startActivityForResult(intent, SEIZED_ACT);
         lv.refreshDrawableState();
+    }
+
+    private void lockupOperatorMode() {
+        Intent intent = new Intent(this, PickupForLockup.class);
+        startActivityForResult(intent, LOCKUP_ACT);
     }
 
     @Override

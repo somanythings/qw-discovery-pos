@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "443316735344",
+    "firebase_url": "https://qwarehouse-71da8.firebaseio.com",
+    "project_id": "qwarehouse-71da8",
+    "storage_bucket": "qwarehouse-71da8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443316735344:android:eb3039e17fe1e8d7",
+        "android_client_info": {
+          "package_name": "uk.gov.borderforce.qwseizure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443316735344-pmi2jp3dpgrmh27357ovlnb4clrm8ktl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8ou94mQwXmEKbIW-tksEIdoS3f2zJS7k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

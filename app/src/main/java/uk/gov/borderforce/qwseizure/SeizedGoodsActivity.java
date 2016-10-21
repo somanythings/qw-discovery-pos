@@ -281,14 +281,11 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     }
 
     private void onBarcodeScanResult(Intent intent, IntentResult result) {
-        String contents = intent.getStringExtra("SCAN_RESULT");
-        String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-        Log.d(TAG, "con" + contents);
-        Log.d(TAG, "form" + format);
-        Log.d(TAG, "contents" + result.getContents());
-
-        updateState(state.copyOnSealChange(result.getContents()));
+        String contents1 = ScanStatic.onSealScanResult(intent, result);
+        updateState(state.copyOnSealChange(contents1));
     }
+
+
 
     ///D/SeizedGoodsActivity: MRTZ scan {"documentType":"P","documentNumber":"LH829577","surNames":"PAINE","givenNames":"LANCE BARRY","countryCode":"NZL","issuingCountryCode":"NZL","nationalityCountryCode":"NZL","dayOfBirth":"800110","expirationDate":"191009","sex":"M","personalNumber":"","personalNumber2":"","checkDigitNumber":"2","checkDigitPersonalNumber":"0","checkDigitDayOfBirth":"6","checkDigitExpirationDate":"4","checkDigitFinal":"0","allCheckDigitsValid":true}
     private void onMrtzScanResult(Intent intent) {

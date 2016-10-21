@@ -5,11 +5,15 @@
     <item android:title="Negative Stop"
         android:id="@+id/negative_stop"
         android:icon="@android:drawable/ic_delete"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="always" />
     <item android:title="Seized Goods"
         android:icon="@android:drawable/ic_input_add"
-        android:showAsAction="ifRoom|always"
+        android:showAsAction="always"
         android:id="@+id/seized_goods" />
+    <item android:title="Lockup operator"
+        android:icon="@android:drawable/ic_lock_idle_lock"
+        android:showAsAction="always"
+        android:id="@+id/lockup_operator" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

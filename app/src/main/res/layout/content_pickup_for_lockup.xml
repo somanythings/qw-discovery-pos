@@ -13,4 +13,37 @@
     tools:context="uk.gov.borderforce.qwseizure.PickupForLockup"
     tools:showIn="@layout/activity_pickup_for_lockup">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/scan_seal_barcode"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanned_item_summary" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Moving to lockup"
+            style="@style/Widget.AppCompat.Button" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Record in lockup"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="In lockup"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Send to QW"/>
+
+    </LinearLayout>
 </RelativeLayout>
