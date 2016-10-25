@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class NegativeStopActivity extends AppCompatActivity {
     final static SimpleDateFormat longDateTimeFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy 'at' HH:mm");
@@ -56,7 +57,7 @@ public class NegativeStopActivity extends AppCompatActivity {
                             }
                         }).show();
 
-                Seizure negative = SFactory.Negative("Lance Paine", Calendar.getInstance(), stopState.freeText);
+                Seizure negative = SFactory.Negative("Lance Paine", GregorianCalendar.getInstance().getTimeInMillis(), stopState.freeText);
 //                MainActivity.addSeizure(negative);
 
                 Intent returnIntent = new Intent();

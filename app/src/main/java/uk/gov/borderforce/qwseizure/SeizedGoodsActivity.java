@@ -19,7 +19,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -32,6 +31,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import at.nineyards.anyline.modules.AnylineBaseModuleView;
 import at.nineyards.anyline.modules.mrz.MrzScanView;
@@ -39,13 +39,14 @@ import at.nineyards.anyline.modules.mrz.MrzScanView;
 import static uk.gov.borderforce.qwseizure.NegativeStopActivity.shortTime;
 import static uk.gov.borderforce.qwseizure.Person.NullPerson;
 
+
 public class SeizedGoodsActivity extends AppCompatActivity {
     final static int SCAN_TRAVEL_DOCUMENT = 3;
     final static String TAG = "SeizedGoodsActivity";
     final static String CIGARETTES = "CIGARETTES";
 
     final static SeizedGoods NullSeizedGoods = new SeizedGoods("", 0, "");
-    final static SeizureState NullState = new SeizureState(Calendar.getInstance(), "", NullPerson, NullSeizedGoods, "");
+    final static SeizureState NullState = new SeizureState(GregorianCalendar.getInstance().getTimeInMillis(), "", NullPerson, NullSeizedGoods, "");
     SeizureState state = null;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -55,6 +56,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     private MrzScanView mrzResultView;
     private AnylineBaseModuleView mrzScanView;
     private Button save;
+    private PersonViewBindings viewBindings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         save = (Button) findViewById(R.id.save);
         setSupportActionBar(toolbar);
+        viewBindings = PersonViewBindings.fromParent(this);
 
         wireTimeText();
         wireDateText(findViewById(R.id.datePicker));
@@ -74,7 +77,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         wireTimeButton(this, findViewById(R.id.timePickerButton));
         wireCancelButton(this);
         wireSaveButton(this);
-        wirePersonScanButton(this);
+        wirePersonMrtzScanButton(this);
         wireBarcodeScanButton(this);
         updateState(state);
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -90,7 +93,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private void wirePersonScanButton(final Activity activity) {
+    private void wirePersonMrtzScanButton(final Activity activity) {
         ImageButton scan = (ImageButton) findViewById(R.id.scan_person_id);
         final Activity outer = this;
         scan.setOnClickListener(new View.OnClickListener() {
@@ -181,19 +184,28 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         tv.setText(this.state.summaryText());
 
         EditText dp = (EditText) (findViewById(R.id.datePicker));
-        dp.setText(this.state.cal.get(Calendar.DAY_OF_MONTH) + "/" + this.state.cal.get(Calendar.MONTH)
-                + "/" + this.state.cal.get(Calendar.YEAR));
+        dp.setText(state.formatShortDate(this));
 
         EditText tm = (EditText) (findViewById(R.id.timePicker));
-        tm.setText(shortTime.format(this.state.cal.getTime()));
+        tm.setText(shortTime.format(this.state.currentCal().getTime()));
 
         EditText seal = (EditText) (findViewById(R.id.seal_id));
         seal.setText(state.sealId);
 
         EditText person = (EditText) (findViewById(R.id.seized_from_text));
         person.setText(state.seizedFrom.toString());
+
+        setPersonText(viewBindings, state.seizedFrom);
     }
 
+    private void setPersonText(PersonViewBindings viewBindings, Person seizedFrom) {
+        viewBindings.dob.setText(seizedFrom.dob);
+        viewBindings.documentId.setText(seizedFrom.documentNumber);
+        viewBindings.surname.setText(seizedFrom.surNames);
+        viewBindings.givenNames.setText(seizedFrom.givenNames);
+        viewBindings.sex.setText(seizedFrom.sex);
+        viewBindings.nationality.setText(seizedFrom.nationality);
+    }
 
     private void wireTimeText() {
         EditText timePicker = (EditText) (findViewById(R.id.timePicker));
@@ -249,13 +261,14 @@ public class SeizedGoodsActivity extends AppCompatActivity {
         timeB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar calendar = state.currentCal();
                 TimePickerDialog dpd = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         Log.d(TAG, "onTimeSet " + hourOfDay + ":" + minute);
                         updateState(state.copyOnTimeChange(hourOfDay, minute));
                     }
-                }, state.cal.get(Calendar.HOUR_OF_DAY), state.cal.get(Calendar.MINUTE), true);
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
                 dpd.show();
             }
         });
@@ -268,7 +281,7 @@ public class SeizedGoodsActivity extends AppCompatActivity {
 
 //        if (requestCode == 0) {
         if (requestCode == SCAN_TRAVEL_DOCUMENT) {
-            onMrtzScanResult(intent);
+            onPersonMrtzScanResult(intent);
         } else {
             if (resultCode == RESULT_OK) {
                 onBarcodeScanResult(intent, result);
@@ -286,9 +299,8 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     }
 
 
-
     ///D/SeizedGoodsActivity: MRTZ scan {"documentType":"P","documentNumber":"LH829577","surNames":"PAINE","givenNames":"LANCE BARRY","countryCode":"NZL","issuingCountryCode":"NZL","nationalityCountryCode":"NZL","dayOfBirth":"800110","expirationDate":"191009","sex":"M","personalNumber":"","personalNumber2":"","checkDigitNumber":"2","checkDigitPersonalNumber":"0","checkDigitDayOfBirth":"6","checkDigitExpirationDate":"4","checkDigitFinal":"0","allCheckDigitsValid":true}
-    private void onMrtzScanResult(Intent intent) {
+    private void onPersonMrtzScanResult(Intent intent) {
         String mrtzJson = intent.getStringExtra("MRTZ");
         Log.d(TAG, "MRTZ scan " + mrtzJson);
 
@@ -317,21 +329,15 @@ public class SeizedGoodsActivity extends AppCompatActivity {
     @NonNull
     private View initCigarettesQuantity(int id, final int increment) {
         View child = getLayoutInflater().inflate(id, null);
-        NumberPicker.Formatter formatter = new NumberPicker.Formatter() {
+
+
+        TextView np = (TextView) child.findViewById(R.id.quantityPicker);
+        np.setText("2000");
+        np.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public String format(int value) {
-                int temp = value * increment;
-                return "" + temp;
-            }
-        };
-        NumberPicker np = (NumberPicker) child.findViewById(R.id.quantityPicker);
-        np.setMinValue(0);
-        np.setFormatter(formatter);
-        np.setMaxValue(Integer.MAX_VALUE);
-        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateState(state.copyOnGoodsQuantityChange(newVal));
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                updateState(state.copyOnGoodsQuantityChange(Integer.parseInt(v.getText().toString())));
+                return true;
             }
         });
         return child;

@@ -34,6 +34,10 @@
             android:label="@string/title_activity_seized_goods"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".SignInActivity"
+            android:label="@string/sign_in"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ScanTravelDocumentActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_scan_travel_document"

@@ -11,14 +11,16 @@ import java.util.Objects;
 public class Person {
     final static Person NullPerson = new Person("", "", "", "", "", "", "", "");
 
-    final public String name;
-    final public String givenNames;
-    final public String surNames;
-    final public String documentNumber;
-    final public String nationality;
-    final public String dob;
-    final public String sex;
-    final public String mrtzJson;
+    public String name;
+    public String givenNames;
+    public String surNames;
+    public String documentNumber;
+    public String nationality;
+    public String dob;
+    public String sex;
+    public String mrtzJson;
+
+    public Person() {}
 
     public Person(String name, String givenNames, String surNames, String documentNumber, String nationality, String dob, String sex, String mrtz) {
         this.name = name;
@@ -77,5 +79,9 @@ public class Person {
     @Override
     public int hashCode() {
         return Objects.hash(name, givenNames, surNames, documentNumber, nationality, dob, sex, mrtzJson);
+    }
+
+    public String shortDescription() {
+        return sex + " " + givenNames + " " + surNames + " " + dob;
     }
 }

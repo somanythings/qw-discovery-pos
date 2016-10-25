@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:showIn="@layout/content_seized_goods">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/seized_from_text"
+        android:layout_width="280dp"
+        android:inputType="textPersonName"
+        android:layout_height="wrap_content"
+        android:hint="Person Id" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/seized_from_text"
+        android:layout_alignBottom="@id/seized_from_text"
+        android:id="@+id/scan_person_id"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+<EditText
+    android:id="@+id/person_given_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Given Names"/>
+<EditText
+    android:id="@+id/person_sur_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="SurNames"/>
+<EditText
+    android:id="@+id/person_document_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Document Id"/>
+<EditText
+    android:id="@+id/person_dob"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="dob"/>
+<EditText
+    android:id="@+id/person_sex"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="sex"/>
+<EditText
+    android:id="@+id/person_nationality"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="nationality"/>
+</LinearLayout>
+
+</RelativeLayout>
+
+            

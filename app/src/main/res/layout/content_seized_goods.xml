@@ -85,23 +85,7 @@
 
             <!--<include layout="@layout/cigarettes_quantity" />-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/seized_from_text"
-                    android:layout_width="280dp"
-                    android:inputType="textPersonName"
-                    android:layout_height="wrap_content"
-                    android:hint="Person Id" />
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/seized_from_text"
-                    android:layout_alignBottom="@id/seized_from_text"
-                    android:id="@+id/scan_person_id"
-                    app:srcCompat="@android:drawable/ic_menu_camera" />
-            </RelativeLayout>
+            <include layout="@layout/seized_from_person" />
 
             <include layout="@layout/scan_seal_barcode" />
 
