@@ -30,14 +30,16 @@ public class SeizureState extends Seizure {
     }
 
     public String summaryText() {
-        String calform = longDateTimeFormat.format(currentCal().getTime());
         String seizedFromDesc = seizedFromDesc();
-        return "seizure @ " + calform + " " + freeText + " from:" + seizedFromDesc + " " + seizedGoods + " Seal: " + sealId;
+        return "seizure @ " + longSeizedDateTime() + " " + freeText + " from:" + seizedFromDesc + " " + seizedGoods + " Seal: " + sealId;
+    }
+
+    private String longSeizedDateTime() {
+        return longDateTimeFormat.format(currentCal().getTime());
     }
 
     public String seizedFromDesc() {
         if (seizedFrom == null) {
-
             return "";
         }
         return seizedFrom.shortDescription();

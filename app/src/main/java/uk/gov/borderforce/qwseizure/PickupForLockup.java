@@ -79,6 +79,7 @@ public class PickupForLockup extends AppCompatActivity {
             @Override
             protected void populateViewHolder(MainActivity.MessageViewHolder viewHolder,
                                               SeizureState friendlyMessage, int position) {
+                Log.d(TAG, "populating: " + friendlyMessage);
                 viewHolder.messageTextView.setText(friendlyMessage.summaryText());
                 viewHolder.messengerTextView.setText(friendlyMessage.seizedBy);
                 viewHolder.seizeFromTextView.setText(friendlyMessage.seizedFrom.shortDescription());

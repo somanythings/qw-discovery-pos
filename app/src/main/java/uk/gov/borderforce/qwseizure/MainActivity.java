@@ -218,11 +218,11 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             protected void populateViewHolder(MessageViewHolder viewHolder,
-                                              SeizureState friendlyMessage, int position) {
+                                              SeizureState seizure, int position) {
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                viewHolder.messageTextView.setText(friendlyMessage.summaryText());
-                viewHolder.messengerTextView.setText(friendlyMessage.seizedBy);
-                viewHolder.seizeFromTextView.setText(friendlyMessage.seizedFromDesc());
+                viewHolder.messageTextView.setText(seizure.summaryText());
+                viewHolder.messengerTextView.setText(seizure.seizedBy);
+                viewHolder.seizeFromTextView.setText(seizure.seizedFromDesc());
                 Glide.with(MainActivity.this)
                         .load("https://thumbs.dreamstime.com/x/cigarette-pack-13800698.jpg")//friendlyMessage.getPhotoUrl())
                         .into(viewHolder.messengerImageView);
